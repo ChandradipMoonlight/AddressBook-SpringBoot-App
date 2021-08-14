@@ -1,13 +1,13 @@
-package com.addressboolapp;
+package com.addressbookapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class AddressBoolAppApplication {
+public class AddressBookAppApplication {
 
     public static void main(String[] args) {
-        SpringApplication.run(AddressBoolAppApplication.class, args);
+        SpringApplication.run(AddressBookAppApplication.class, args);
         System.out.println("Application is started");
     }
 
