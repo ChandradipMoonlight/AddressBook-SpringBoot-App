@@ -9,4 +9,10 @@ public interface IAddressBookService {
     AddressBookEntity createAddressBookData(AddressBookDTO addressBookDTO);
 
     List<AddressBookEntity> getAddressBookData();
+
+    AddressBookEntity updateAddressBookDataById(int id, AddressBookDTO addressBookDTO);
+
+    AddressBookEntity deleteAddressBookById(int id);
+
+    AddressBookEntity getAddressBookDataById(int id);
 }
