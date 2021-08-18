@@ -1,5 +1,6 @@
 package com.addressbookapp.dto;
 
+import com.addressbookapp.entity.AddressBookEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 
@@ -8,4 +9,5 @@ import lombok.Data;
 public class ResponseDTO {
     private String message;
     private Object data;
+
 }

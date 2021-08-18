@@ -1,19 +1,30 @@
 package com.addressbookapp.service;
 
+import com.addressbookapp.builder.AddressBookBuilder;
+import com.addressbookapp.constant.ExceptionConstants;
 import com.addressbookapp.dto.AddressBookDTO;
 import com.addressbookapp.entity.AddressBookEntity;
+import com.addressbookapp.exception.CustomException;
 import com.addressbookapp.repository.AddressBookRepository;
+import org.modelmapper.ModelMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ImlAddressBookService implements IAddressBookService{
 
     @Autowired
-    AddressBookRepository addressBookRepository;
+    private AddressBookRepository addressBookRepository;
+
+    @Autowired
+    private AddressBookBuilder addressBookBuilder;
+
+    @Autowired
+    private ModelMapper modelMapper;
 
     /**
      * Purpose: Method to add the data to the AddressBook System.
@@ -25,7 +36,7 @@ public class ImlAddressBookService implements IAddressBookService{
 
     @Override
     public AddressBookEntity createAddressBookData(AddressBookDTO addressBookDTO) {
-        AddressBookEntity addressBookEntity = new AddressBookEntity(addressBookDTO);
+        AddressBookEntity addressBookEntity = addressBookBuilder.buildDO(addressBookDTO);
         return addressBookRepository.save(addressBookEntity);
     }
 
@@ -36,7 +47,9 @@ public class ImlAddressBookService implements IAddressBookService{
      */
     @Override
     public List<AddressBookEntity> getAddressBookData() {
-        return addressBookRepository.findAll();
+        return addressBookRepository.findAll().stream()
+                .map(addressBookEntity -> modelMapper.map(addressBookEntity, AddressBookEntity.class))
+                .collect(Collectors.toList());
     }
 
     /**
@@ -54,42 +67,46 @@ public class ImlAddressBookService implements IAddressBookService{
     @Override
     public AddressBookEntity updateAddressBookDataById(int id,
                                                        AddressBookDTO addressBookDTO) {
-        AddressBookEntity addressBookEntity = addressBookRepository.findById(id).get();
+        AddressBookEntity addressBookEntity = addressBookRepository.findById(id)
+                .orElseThrow(() -> new CustomException(ExceptionConstants.ID_NOT_FOUND.getMessage()));
+        BeanUtils.copyProperties(addressBookDTO, addressBookEntity);
+        addressBookRepository.save(addressBookEntity);
+        return addressBookEntity;
 
-        if (Objects.nonNull(addressBookDTO.getName()) &&
-                !"".equalsIgnoreCase(addressBookDTO.getName())) {
-            addressBookEntity.setName(addressBookDTO.getName());
-        }
+//        if (Objects.nonNull(addressBookDTO.getName()) &&
+//                !"".equalsIgnoreCase(addressBookDTO.getName())) {
+//            addressBookEntity.setName(addressBookDTO.getName());
+//        }
+//
+//        if (Objects.nonNull(addressBookDTO.getAddress()) &&
+//                !"".equalsIgnoreCase(addressBookDTO.getAddress())) {
+//            addressBookEntity.setAddress(addressBookDTO.getAddress());
+//        }
+//
+//        if (Objects.nonNull(addressBookDTO.getCity()) &&
+//                !"".equalsIgnoreCase(addressBookDTO.getCity())) {
+//            addressBookEntity.setCity(addressBookDTO.getCity());
+//        }
+//
+//        if (Objects.nonNull(addressBookDTO.getState()) &&
+//             !"".equalsIgnoreCase(addressBookDTO.getState())) {
+//            addressBookEntity.setState(addressBookDTO.getState());
+//        }
+//
+//        if (Objects.nonNull(addressBookDTO.getZip()) &&
+//                !"".equalsIgnoreCase(addressBookDTO.getZip()))
+//            addressBookEntity.setZip(addressBookDTO.getZip());
+//
+//        if (Objects.nonNull(addressBookDTO.getEmail()) &&
+//                !"".equalsIgnoreCase(addressBookDTO.getEmail()))
+//        addressBookEntity.setEmail(addressBookDTO.getEmail());
+//
+//
+//        if (Objects.nonNull(addressBookDTO.getPhoneNo()) &&
+//                !"".equalsIgnoreCase(addressBookDTO.getPhoneNo()))
+//        addressBookEntity.setPhoneNo(addressBookDTO.getPhoneNo());
 
-        if (Objects.nonNull(addressBookDTO.getAddress()) &&
-                !"".equalsIgnoreCase(addressBookDTO.getAddress())) {
-            addressBookEntity.setAddress(addressBookDTO.getAddress());
-        }
-
-        if (Objects.nonNull(addressBookDTO.getCity()) &&
-                !"".equalsIgnoreCase(addressBookDTO.getCity())) {
-            addressBookEntity.setCity(addressBookDTO.getCity());
-        }
-
-        if (Objects.nonNull(addressBookDTO.getState()) &&
-             !"".equalsIgnoreCase(addressBookDTO.getState())) {
-            addressBookEntity.setState(addressBookDTO.getState());
-        }
-
-        if (Objects.nonNull(addressBookDTO.getZip()) &&
-                !"".equalsIgnoreCase(addressBookDTO.getZip()))
-            addressBookEntity.setZip(addressBookDTO.getZip());
-
-        if (Objects.nonNull(addressBookDTO.getEmail()) &&
-                !"".equalsIgnoreCase(addressBookDTO.getEmail()))
-        addressBookEntity.setEmail(addressBookDTO.getEmail());
-
-
-        if (Objects.nonNull(addressBookDTO.getPhoneNo()) &&
-                !"".equalsIgnoreCase(addressBookDTO.getPhoneNo()))
-        addressBookEntity.setPhoneNo(addressBookDTO.getPhoneNo());
-
-        return addressBookRepository.save(addressBookEntity);
+//        return addressBookRepository.save(addressBookEntity);
     }
 
     /**

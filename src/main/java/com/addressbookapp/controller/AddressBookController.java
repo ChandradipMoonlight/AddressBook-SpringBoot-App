@@ -17,23 +17,23 @@ import java.util.List;
 public class AddressBookController {
 
     @Autowired
-    IAddressBookService addressBookService;
+    private IAddressBookService addressBookService;
 
     /**
      * Purpose:- this method is used to add the data into the AddressBook System.
      *
      * @param addressBookDTO this is Object of AddressBookDTO class which holds the all
      *                        the information which is coming from the user end. that will pass as argument
-     *                        in the service class method which will stor it in the Address Book
+     *                        in the service class method which will store it in the Address Book
      *                         Database.
      * @return returns the response of the method.
      */
 
-    @PostMapping("/create")
+    @PostMapping("/address")
     public ResponseEntity<ResponseDTO> createAddressBookData(@RequestBody AddressBookDTO addressBookDTO) {
+        log.info("Inside createAddressBookData() Method of AddressBookController Class");
         AddressBookEntity addressBookEntity = addressBookService.createAddressBookData(addressBookDTO);
         ResponseDTO responseDTO = new ResponseDTO("Created Address Book Data Successfully!", addressBookEntity);
-        log.info("Inside createAddressBookData() Method of AddressBookController Class");
         return new ResponseEntity<>(responseDTO, HttpStatus.CREATED);
     }
 
@@ -42,7 +42,7 @@ public class AddressBookController {
      *
      * @return returns the all the data from the addressBook System.
      */
-    @GetMapping("/get")
+    @GetMapping("/address")
     public ResponseEntity<ResponseDTO> getAddressBookData() {
         log.info("Inside getAddressBookData() Method of AddressBookController Class");
         List<AddressBookEntity> addressBookEntityList = addressBookService.getAddressBookData();
@@ -58,8 +58,9 @@ public class AddressBookController {
      * @return response of the method as information related to the that id.
      */
 
-    @GetMapping("/getById/{id}")
+    @GetMapping("/address/{id}")
     public ResponseEntity<ResponseDTO> getAddressBookDataById(@PathVariable("id") int id) {
+        log.info("Inside getAddressBookDataById() method of the AddressBookController Class");
         AddressBookEntity addressBookEntityList = (AddressBookEntity) addressBookService.getAddressBookDataById(id);
         ResponseDTO responseDTO = new ResponseDTO("Data Fetched SuccessFully!", addressBookEntityList);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -75,9 +76,10 @@ public class AddressBookController {
      * @return returns the response of the method as updated data.
      */
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/address/{id}")
     public ResponseEntity<ResponseDTO> updateAddressBookDataById(@PathVariable("id") int id,
                                                                  @RequestBody AddressBookDTO addressBookDTO) {
+        log.info("Inside updateAddressBookDataById() method of the AddressBookController Class");
         AddressBookEntity addressBookEntity = addressBookService.updateAddressBookDataById(id, addressBookDTO);
         ResponseDTO responseDTO = new ResponseDTO("Updated Successfully", addressBookEntity);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
@@ -91,8 +93,9 @@ public class AddressBookController {
      * @return returns the message that data is deleted Successfully and data as null.
      */
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/address/{id}")
     public ResponseEntity<ResponseDTO> deleteAddressBookDataById(@PathVariable("id") int id) {
+        log.info("Inside deleteAddressBookDataById() method of the AddressBookController Class");
         AddressBookEntity addressBookEntity = addressBookService.deleteAddressBookById(id);
         ResponseDTO responseDTO = new ResponseDTO("Data Deleted Successfully!!", addressBookEntity);
         return new ResponseEntity<>(responseDTO, HttpStatus.OK);
