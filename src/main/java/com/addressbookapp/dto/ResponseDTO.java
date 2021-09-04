@@ -1,6 +1,5 @@
 package com.addressbookapp.dto;
 
-import com.addressbookapp.entity.AddressBookEntity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

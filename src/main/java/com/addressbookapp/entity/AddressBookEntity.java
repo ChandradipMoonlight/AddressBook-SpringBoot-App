@@ -1,6 +1,8 @@
 package com.addressbookapp.entity;
 
 import lombok.Data;
+import org.hibernate.annotations.CreationTimestamp;
+import org.hibernate.annotations.UpdateTimestamp;
 
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -19,13 +21,14 @@ public class AddressBookEntity {
     private String city;
     private String state;
     private String zip;
-    private String email;
     private String phoneNo;
+
+    @CreationTimestamp
     private LocalDate createdDate;
+
+    @UpdateTimestamp
     private LocalDate updatedDate;
 
     public AddressBookEntity() {
-        createdDate=LocalDate.now();
-        updatedDate=LocalDate.now();
     }
 }
